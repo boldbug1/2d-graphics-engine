@@ -31,8 +31,18 @@ void fill_circle(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pi
 }
 
 void fill_rect(std::vector<pixel>& fb,int w,int h,int sx,int sy,int ex,int ey,pixel color){
-    for(int x = sx;x <=ex;x++){
-        for(int y=sy;y<=ey;y++){
+    for(int y = sy;y <=ey;y++){
+        for(int x=sx;x<=ex;x++){
+            setpixel(fb,w,h,x,y,color);
+        }
+    }
+}
+
+void fill_triangle(std::vector<pixel>& fb,int w,int h,int sx,int sy,int ex, int ey,pixel color){
+    int cx = (sx+ex)/2;
+    for(int y=sy;y<=ey;y++){
+        int half = (ex - sx) / 2 * (y - sy) / (ey - sy);
+        for(int x=cx-half;x<=cx+half;x++){
             setpixel(fb,w,h,x,y,color);
         }
     }
@@ -45,8 +55,8 @@ int main(void){
     std::vector<pixel> framebuffer(w*h);
 
     //fill the whole frame white :) for immersion idk
-    for(int y = 0; y <= h;y++){
-        for(int x = 0;x <= w;x++){
+    for(int y = 0; y < h;y++){
+        for(int x = 0;x < w;x++){
             setpixel(framebuffer,w,h,x,y,{255,255,255,255});
         }
     }
@@ -54,6 +64,7 @@ int main(void){
     setpixel(framebuffer, w, h, 10, 10, {255, 0, 0, 255});
     fill_circle(framebuffer,w,h,50,50,50,{0,255,0,255});
     fill_rect(framebuffer,w,h,50,50,100,100,{255,0,255,255});
+    fill_triangle(framebuffer,w,h,30,150,89,216,{255,0,0,255});
 
     //write headers (ppm)
     std::ofstream out("image.ppm", std::ios::binary);
