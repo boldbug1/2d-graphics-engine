@@ -18,7 +18,17 @@ void setpixel(std::vector<pixel>& fb , int w, int h,int x, int y,pixel color){
     fb[y * w + x] =  color;
 }
 
-
+void fill_circle(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pixel color) {
+    for (int y = cy - r; y <= cy + r; y++) {
+        for (int x = cx - r; x <= cx + r; x++) {
+            int dx = x - cx;
+            int dy = y - cy;
+            if (dx*dx + dy*dy <= r*r) {
+                setpixel(fb, w, h, x, y, color);
+            }
+        }
+    }
+}
 
 int main(void){
     int w = 256;
@@ -26,7 +36,14 @@ int main(void){
 
     std::vector<pixel> framebuffer(w*h);
 
+    //fill the whole frame white
+    for(int y = 0; y <= h;y++){
+        for(int x = 0;x <= w;x++){
+            setpixel(framebuffer,w,h,x,y,{255,255,255,255});
+        }
+    }
     setpixel(framebuffer, w, h, 10, 10, {255, 0, 0, 255});
+    fill_circle(framebuffer,w,h,100,100,100,{0,255,0,255});
 
     std::ofstream out("image.ppm", std::ios::binary);
     out << "P6\n" << w << " " << h << "\n255\n";
@@ -36,4 +53,6 @@ int main(void){
     out.write(reinterpret_cast<const char*>(&p.g), 1);
     out.write(reinterpret_cast<const char*>(&p.b), 1);
 }
+
+
 }
