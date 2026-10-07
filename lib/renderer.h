@@ -14,3 +14,4 @@ void fill_circle(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pi
 void fill_rect(std::vector<pixel>& fb,int w,int h,int sx,int sy,int ex,int ey,pixel color);
 void fill_triangle(std::vector<pixel>& fb,int w,int h,int sx,int sy,int ex, int ey,pixel color);
 void save_ppm(const std::vector<pixel>& fb, int w, int h, const char* path);
+void fill_circle_aa(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pixel color);

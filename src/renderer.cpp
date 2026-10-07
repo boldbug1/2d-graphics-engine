@@ -64,3 +64,26 @@ pixel blend(pixel dst, pixel src){
     newcolor.a = 255;
     return newcolor;
 }
+
+void fill_circle_aa(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pixel color) {
+    for (int y = cy - r -1; y <= cy + r+1; y++) {
+        for (int x = cx - r - 1; x <= cx + r+1; x++) {
+            int hits = 0;
+            for(int i=0;i<4;i++){
+                for(int j =0;j<4;j++){
+                    float px = x + (i + 0.5f) / 4;
+                    float py = y + (j + 0.5f) / 4;
+
+                    float dx = px-cx;
+                    float dy = py-cy;
+                    if(dx*dx + dy*dy <= r*r)hits++;
+                }
+            }
+            if (hits>0){
+                pixel c = color;
+                c.a = static_cast<uint8_t>(color.a * hits/16);
+                setpixel(fb,w,h,x,y,c);
+            }
+        }
+    }
+}

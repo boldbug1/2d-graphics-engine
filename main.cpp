@@ -13,11 +13,10 @@ int main(void){
     //fill the whole frame white :) for immersion idk
     fill_rect(framebuffer, w, h, 0, 0, w-1, h-1, {255,255,255,255});
 
-    fill_circle(framebuffer, w, h, 100, 100, 60, {255, 0, 0, 128});
-    fill_circle(framebuffer, w, h, 156, 100, 60, {0, 255, 0, 128});
-    fill_circle(framebuffer, w, h, 128, 150, 60, {0, 0, 255, 128});
+    fill_circle(framebuffer, w, h, 70, 128, 50,{255,165,0,255});
+    fill_circle_aa(framebuffer, w, h, 186, 128, 50,{255,165,0,255});
 
 
-    save_ppm(framebuffer,w,h,"images/alpha.ppm");
+    save_ppm(framebuffer,w,h,"images/aa.ppm");
 
 }
