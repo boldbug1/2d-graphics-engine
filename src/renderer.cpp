@@ -1,5 +1,4 @@
 #include "../lib/renderer.h"
-#include <fstream>
 
 
 
@@ -10,17 +9,6 @@ void setpixel(std::vector<pixel>& fb , int w, int h,int x, int y,pixel color){
     fb[y * w + x] = blend(fb[y * w + x], color);
 }
 
-void fill_circle(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pixel color) {
-    for (int y = cy - r; y <= cy + r; y++) {
-        for (int x = cx - r; x <= cx + r; x++) {
-            int dx = x - cx;
-            int dy = y - cy;
-            if (dx*dx + dy*dy <= r*r) {
-                setpixel(fb, w, h, x, y, color);
-            }
-        }
-    }
-}
 
 void fill_rect(std::vector<pixel>& fb,int w,int h,int sx,int sy,int ex,int ey,pixel color){
     for(int y = sy;y <=ey;y++){
@@ -86,4 +74,28 @@ void fill_circle_aa(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r,
             }
         }
     }
+}
+
+
+
+void render(std::vector<pixel>& fb,int w,int h,const std::vector<Shapes>& scene) {
+    for(const Shapes& s:scene){
+        switch (s.index()) {
+            case 0: { 
+                const Circle& c = std::get<Circle>(s);
+                fill_circle_aa(fb, w, h, c.cx, c.cy, c.r, c.color);
+                break;
+            }
+            case 1: {
+                const Rectangle& r = std::get<Rectangle>(s);
+                fill_rect(fb, w, h, r.sx, r.sy, r.ex, r.ey, r.color);
+                break;
+            }
+            case 2: {
+                const Triangle& t = std::get<Triangle>(s);
+                fill_triangle(fb, w, h, t.sx, t.sy, t.ex, t.ey, t.color);
+                break;
+            }
+    }
+}
 }
