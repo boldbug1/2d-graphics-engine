@@ -1,13 +1,13 @@
-#include "renderer.h"
+#include "../lib/renderer.h"
 #include <fstream>
+
 
 
 void setpixel(std::vector<pixel>& fb , int w, int h,int x, int y,pixel color){
     if ((x < 0 || x > w-1) || (y < 0 || y > h -1)){
         return;
     }
-    
-    fb[y * w + x] =  color;
+    fb[y * w + x] = blend(fb[y * w + x], color);
 }
 
 void fill_circle(std::vector<pixel>& fb, int w, int h, int cx, int cy, int r, pixel color) {
@@ -54,4 +54,13 @@ void save_ppm(const std::vector<pixel>& fb, int w, int h, const char* path) {
     out.write(reinterpret_cast<const char*>(&p.g), 1);
     out.write(reinterpret_cast<const char*>(&p.b), 1);
     }
+}
+
+pixel blend(pixel dst, pixel src){
+    pixel newcolor;
+    newcolor.r = static_cast<uint8_t>((src.r * src.a + dst.r *(255-src.a)) / 255);
+    newcolor.g = static_cast<uint8_t>((src.g * src.a + dst.g *(255-src.a)) / 255);  
+    newcolor.b = static_cast<uint8_t>((src.b * src.a + dst.b *(255-src.a)) / 255);  
+    newcolor.a = 255;
+    return newcolor;
 }
